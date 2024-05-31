@@ -1,121 +1,68 @@
-const { log } = console
+const log = console.log
 
 /**
- * 기존과 달라진 ES6에서의 리스트 순회
- * - fot i++
- * - for of
+ * 제너레이터/이터레이터
+ * - 제너레이터: 이터레이터이자 이터러블 생성하는 함수
  */
 
-// ES5
-const list = [1, 2, 3]
-// length를 의존하여 순회
-for (var i = 0; i < list.length; i++) {
-  log(list[i])
+function* gen() {
+  yield 1
+  yield 2
+  yield 3
+
+  return 100 // 순회에 포함되지 않음
 }
 
-const str = 'abc'
-for (var i = 0; i < str.length; i++) {
-  log(str[i])
-}
+const iter = gen()
+log(iter.next())
+log(iter.next())
+log(iter.next())
+log(iter.next())
+log(iter.next())
 
-// ES6
-for (const a of list) {
+for (const a of gen()) {
   log(a)
 }
 
-for (const a of str) {
-  log(a)
+function* infinity(i = 0) {
+  while (true) {
+    yield i++
+  }
 }
 
-/**
- * Array를 통해 알아보기
- */
-
-log('Arr -----------------')
-const arr = [1, 2, 3]
-for (const a of arr) {
-  log(a)
-}
-
-/**
- * Set을 통해 알아보기
- */
-
-log('Set -----------------')
-const set = new Set([1, 2, 3])
-for (const a of set) {
-  log(a)
-}
-
-/**
- * Map을 통해 알아보기
- */
-
-log('Map -----------------')
-const map = new Map([
-  ['a', 1],
-  ['b', 2],
-  ['c', 3],
-])
-for (const a of map) {
-  log(a)
-}
-for (const a of map.keys()) {
-  log(a)
-}
-for (const a of map.values()) {
-  log(a)
-}
-for (const a of map.entries()) {
-  log(a)
-}
-
-/**
- * 이터러블/이터레이터 프로토콜
- * - 이터러블: 이터레이터를 리턴하는 [Symbol.iterator]()를 가진 값
- * - 이터레이터: { value, done } 객체를 리턴하는 next()를 가진 값
- * - 이터러블/이터레이터 프로토콜: 이터러블을 for...of, 전개 연산자 등과 함께 동작하도록한 규약
- */
-
-/**
- * 사용자 정의 이터러블을 통해 알아보기
- */
-
-const iterable = {
-  [Symbol.iterator]() {
-    let i = 3
-
-    return {
-      next() {
-        return i === 0
-          ? {
-              done: true,
-            }
-          : {
-              value: i--,
-              done: false,
-            }
-      },
-      [Symbol.iterator]() {
-        return this
-      },
+function* limit(l: number, iter: Generator<number>) {
+  for (const a of iter) {
+    yield a
+    if (a === l) {
+      return
     }
-  },
+  }
 }
 
-const iterator = iterable[Symbol.iterator]()
-log(iterator[Symbol.iterator]() === iterator)
-log(iterator.next())
-
-for (const a of iterable) {
-  log(a)
+function* odds(l: number = Infinity) {
+  for (const a of limit(l, infinity(1))) {
+    if (a % 2) {
+      yield a
+    }
+  }
 }
 
-const arr2 = [1, 2, 3]
-const iter2 = arr2[Symbol.iterator]()
-console.log(iter2[Symbol.iterator]() === iter2)
+const iter2 = odds(10)
+log(iter2.next())
+log(iter2.next())
+log(iter2.next())
+log(iter2.next())
+log(iter2.next())
+log(iter2.next())
+log(iter2.next())
+log(iter2.next())
 
-iter2.next()
-for (const a of iter2) {
-  log(a)
-}
+// const iter3 = infinity(3)
+// log(iter3.next())
+// log(iter3.next())
+// log(iter3.next())
+// log(iter3.next())
+// log(iter3.next())
+// log(iter3.next())
+// log(iter3.next())
+// log(iter3.next())
