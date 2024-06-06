@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "functional typescript",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "ch04": "ts-node ./ch04"
   },
   "author": "cobocho",
   "license": "ISC",
