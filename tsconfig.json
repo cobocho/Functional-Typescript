@@ -6,6 +6,8 @@
     "strict": true /* Enable all strict type-checking options. */,
     "preserveValueImports": false,
     "module": "CommonJS",
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   }
 }
